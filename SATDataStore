@@ -1,0 +1,19 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class SATDataStore {
+    private static List<SATResult> results = new ArrayList<>();
+
+    public static void addResult(SATResult result) {
+        results.add(result);
+    }
+
+    public static SATResult getResult(String name) {
+        for (SATResult result : results) {
+            if (result.getName().equals(name)) {
+                return result;
+            }
+        }
+        return null;
+    }
+}
