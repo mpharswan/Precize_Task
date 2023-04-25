@@ -1,0 +1,36 @@
+import static spark.Spark.*;
+
+public class SATServer {
+
+    public static void main(String[] args) {
+       
+        post("/results", (req, res) -> {
+         
+            String name = req.queryParams("name");
+            String city = req.queryParams("city");
+            String country = req.queryParams("country");
+            String pincode = req.queryParams("pincode");
+            int satScore = Integer.parseInt(req.queryParams("satScore"));
+            Address address = new Address(city, country, pincode);
+            SATResult result = new SATResult(name, address, satScore);
+
+          
+            res.type("application/json");
+            return result;
+        }, json());
+
+        get("/results/:name", (req, res) -> {
+           
+            String name = req.params(":name");
+            
+            SATResult result = null; // replace with actual implementation
+            if (result != null) {
+                res.type("application/json");
+                return result;
+            } else {
+                res.status(404);
+                return "SAT Result not found";
+            }
+        });
+    }
+}
