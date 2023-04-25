@@ -1,0 +1,63 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class SATResultsServer {
+
+    private final List<SATResult> results;
+
+    public SATResultsServer() {
+        this.results = new ArrayList<>();
+    }
+
+    public void addResult(SATResult result) {
+        results.add(result);
+    }
+
+    public void updateResult(SATResult result) {
+        results.removeIf(r -> r.getName().equals(result.getName()));
+        results.add(result);
+    }
+
+    public void deleteResult(String name) {
+        results.removeIf(r -> r.getName().equals(name));
+    }
+
+    public List<SATResult> getAllResults() {
+        return new ArrayList<>(results);
+    }
+
+    public int getRank(String name) {
+        int score = getScoreByName(name);
+        return (int) results.stream()
+                .filter(r -> r.getScore() > score)
+                .count() + 1;
+    }
+
+    public boolean getPassed(String name) {
+        int score = getScoreByName(name);
+        return score > (30 * 2400 / 100);
+    }
+
+    public List<SATResult> getCandidates(boolean passed) {
+        return results.stream()
+                .filter(r -> r.getScore() > (30 * 2400 / 100) == passed)
+                .collect(Collectors.toList());
+    }
+
+    public List<SATResult> searchCandidates(String nameSearchPattern, int pincode) {
+        return results.stream()
+                .filter(r -> r.getName().toLowerCase().contains(nameSearchPattern.toLowerCase()))
+                .filter(r -> r.getAddress().getPincode() == pincode)
+                .collect(Collectors.toList());
+    }
+
+    private int getScoreByName(String name) {
+        return results.stream()
+                .filter(r -> r.getName().equals(name))
+                .mapToInt(SATResult::getScore)
+                .findFirst()
+                .orElse(0);
+    }
+
+}
+
