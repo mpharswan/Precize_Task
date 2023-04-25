@@ -38,7 +38,7 @@ public class SATServer {
 }
 
         put("/results/:name", (req, res) -> {
-            // Update the SATResult object for the given name with the data from the request
+          
             String name = req.params(":name");
             String city = req.queryParams("city");
             String country = req.queryParams("country");
@@ -48,13 +48,13 @@ public class SATServer {
             SATResult result = new SATResult(name, address, satScore);
             SATDataStore.addResult(result);
 
-            // Return the updated SATResult object as JSON
+           
             res.type("application/json");
             return result;
         }, json());
 
         delete("/results/:name", (req, res) -> {
-            // Delete the SATResult object for the given name from the data store
+          
             String name = req.params(":name");
             SATResult result = SATDataStore.getResult(name);
             if (result != null) {
@@ -68,14 +68,14 @@ public class SATServer {
         });
 
         get("/results", (req, res) -> {
-            // Retrieve all the SATResult objects from the data store and return as JSON
+           
             List<SATResult> results = SATDataStore.getAllResults();
             res.type("application/json");
             return results;
         }, json());
 
         get("/results/rank/:name", (req, res) -> {
-            // Retrieve the rank of the SATResult object for the given name
+         
             String name = req.params(":name");
             int rank = SATDataStore.getRank(name);
             Gson gson = new Gson();
